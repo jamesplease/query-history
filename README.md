@@ -162,7 +162,7 @@ This library uses the [`query-string`](https://github.com/sindresorhus/query-str
 behavior, pass `queryStringOptions` when calling `createQueryHistory`.
 
 For example, if you would like to specify how arrays are serialized and parsed, you can specify the
-[`arrayFormat`](https://github.com/sindresorhus/query-string#arrayformat) option like so.
+[`arrayFormat`](https://github.com/sindresorhus/query-string#arrayformat) option like so:
 
 ```js
 import createQueryHistory from 'query-history';
