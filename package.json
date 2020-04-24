@@ -1,6 +1,6 @@
 {
   "name": "query-history",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "A history with improved query parameter support.",
   "main": "dist/index.js",
   "module": "es/index.js",
