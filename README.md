@@ -31,7 +31,15 @@ import createQueryHistory from 'query-history';
 const history = createQueryHistory();
 ```
 
-The first argument is an option `basename`, which allows you to specify the `basename` for the history object. For more, refer to the
+`createQueryHistory` accepts all of the same option as `history`, so you can, for example, specify a `basename` option:
+
+```js
+const history = createQueryHistory({
+  basename: '/my-app',
+});
+```
+
+For more information on the available options, refer to the
 [history docs](https://github.com/ReactTraining/history/blob/master/docs/GettingStarted.md).
 
 Once you have a `history`, you can then pass it into a `Router` from React Router.
@@ -150,16 +158,18 @@ history.push({
 
 ### Configuring query parameter behavior
 
-This library uses the [`query-string`](https://github.com/sindresorhus/query-string) library to parse and serialize query parameters.
-If you would like to specify how arrays are serialized and parsed, you can specify the
-[`arrayFormat`](https://github.com/sindresorhus/query-string#arrayformat) option as a prop to the Router.
+This library uses the [`query-string`](https://github.com/sindresorhus/query-string) library to parse and serialize query parameters. To configure this
+behavior, pass `queryStringOptions` when calling `createQueryHistory`.
+
+For example, if you would like to specify how arrays are serialized and parsed, you can specify the
+[`arrayFormat`](https://github.com/sindresorhus/query-string#arrayformat) option like so.
 
 ```js
 import createQueryHistory from 'query-history';
 
-const history = createQueryHistory(basename, {
-  arrayFormat: 'comma',
+const history = createQueryHistory({
+  queryStringOptions: {
+    arrayFormat: 'comma',
+  },
 });
 ```
-
-At this time, no other options from `query-string` are supported.
