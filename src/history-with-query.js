@@ -100,7 +100,7 @@ export default function historyWithQuery(history, stringify, parse) {
   // This relies on being the first listener called by
   // the actual history instance. If you register a
   // listener on the history instance before modifying
-  // it with qhistory, the location object will not have
+  // it with query-history, the location object will not have
   // the query property set on it when that listener
   // is called.
   history.listen(location => {
