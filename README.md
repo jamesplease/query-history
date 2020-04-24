@@ -173,3 +173,7 @@ const history = createQueryHistory({
   },
 });
 ```
+
+## Acknowledgements
+
+This library was inspired by [qhistory](https://github.com/pshrmn/qhistory).
