@@ -57,7 +57,7 @@ return (
 
 ### Reading query parameters
 
-When using this library, the `location` object from React Router includes a new key, `query`. This is
+When using this library, the `location` object includes a new key, `query`. This is
 an object that represents the query parameters.
 
 ```js
