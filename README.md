@@ -82,9 +82,9 @@ For instance, given the URL `https://app.com/?hello=true&sandwiches=tasty&size=4
 }
 ```
 
-Keep in mind that this library will parse your query parameters as an object, but individual query parameter values are
-always interpreted as strings. Notice how the `size` parameter is parsed as the string `"40"` in the example above. You
-will need to manage converting these values to the correct type in your application.
+Keep in mind that although this library will parse your query string as an object, the individual query string
+values are always strings. Notice how the `size` parameter is parsed as the string `"40"` in the example above. You
+are responsible for converting the values to their correct type in your application.
 
 ### Updating query parameters
 
