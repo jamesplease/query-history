@@ -1,4 +1,4 @@
-import createQueryHistory from './index';
+import createQueryHistory from '../src';
 
 // The purpose of this is to reset the state of the history object.
 // The problem is...this approach is hacky, and subject to break. I learned of this
