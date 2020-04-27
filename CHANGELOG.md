@@ -1,5 +1,9 @@
 # Changelog
 
+### v1.1.0 (2020/2/27)
+
+- Distribution now includes a UMD build
+
 ### v1.0.0 (2020/2/21)
 
 - This release marks API stability

@@ -1,29 +1,53 @@
+import commonjs from '@rollup/plugin-commonjs';
 import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import replace from 'rollup-plugin-replace';
 import babel from 'rollup-plugin-babel';
+import { uglify } from 'rollup-plugin-uglify';
 import pkg from './package.json';
 
-const env = process.env.NODE_ENV;
+const extensions = ['.js'];
 
 export default [
+  // browser-friendly UMD build
   {
     input: 'src/index.js',
-    external: [],
+    output: {
+      name: 'createQueryHistory',
+      file: pkg.browser,
+      format: 'umd',
+      globals: {
+        history: 'history',
+        'query-string': 'queryString',
+      },
+    },
+    external: ['history', 'query-string'],
+    plugins: [
+      resolve({ extensions }),
+      commonjs(),
+      babel({
+        extensions,
+        include: ['src/**/*'],
+        exclude: ['node_modules/**'],
+      }),
+      uglify(),
+    ],
+  },
+
+  // CommonJS (for Node) and ES module (for bundlers) build.
+  {
+    input: 'src/index.js',
     output: [
       { file: pkg.main, format: 'cjs' },
       { file: pkg.module, format: 'es' },
     ],
+    external: ['history', 'query-string'],
     plugins: [
-      resolve({
-        jsnext: true,
-      }),
-      babel({
-        exclude: 'node_modules/**',
-      }),
+      resolve({ extensions }),
       commonjs(),
-      replace({
-        'process.env.NODE_ENV': JSON.stringify(env),
+
+      babel({
+        extensions,
+        include: ['src/**/*'],
+        exclude: ['node_modules/**'],
       }),
     ],
   },
