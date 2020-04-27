@@ -143,25 +143,6 @@ describe('createQueryHistory', () => {
         expect(history.location.pathname).toEqual('/soda');
       });
 
-      // it.only('also supports passing the search string', () => {
-      //   const history = createQueryHistory();
-
-      //   expect(history.location.pathname).toEqual('/');
-      //   expect(history.location.query).toEqual({});
-
-      //   history.push({
-      //     pathname: '/soda',
-      //     search: '?pasta=true',
-      //   });
-
-      //   console.log('hello', history.location);
-
-      //   expect(history.location.pathname).toEqual('/soda');
-      //   expect(history.location.query).toEqual({
-      //     pasta: 'true',
-      //   });
-      // });
-
       it('updates location and merges query parameters by default', () => {
         const history = createQueryHistory();
 
