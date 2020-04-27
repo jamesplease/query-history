@@ -41,6 +41,7 @@
     "babel-jest": "^24.8.0",
     "cpy-cli": "^2.0.0",
     "eslint": "^5.16.0",
+    "eslint-plugin-jest": "^23.8.2",
     "eslint-plugin-react": "^7.13.0",
     "eslint-plugin-react-hooks": "^1.6.0",
     "jest": "^24.8.0",
