@@ -10,8 +10,15 @@ import createQueryHistory from '../src';
 // stick with this for now, but I'll likely need to revisit it sometimes in the future.
 beforeEach(() => {
   delete global.location;
+
+  // These are the minimum fields required for React Router's history to parse location properly.
+  // see:
+  // https://github.com/ReactTraining/history/blob/3f69f9e07b0a739419704cffc3b3563133281548/modules/createBrowserHistory.js#L55-L57
   global.location = {
     href: 'http://example.org/',
+    pathname: '/',
+    search: '',
+    hash: '',
   };
 });
 
@@ -27,6 +34,7 @@ describe('createQueryHistory', () => {
       expect(history).toEqual(
         expect.objectContaining({
           push: expect.any(Function),
+          replace: expect.any(Function),
           listen: expect.any(Function),
           length: expect.any(Number),
           location: expect.any(Object),
@@ -50,6 +58,20 @@ describe('createQueryHistory', () => {
     it('has an empty object by default when no params exist', () => {
       const history = createQueryHistory();
       expect(history.location.query).toEqual({});
+    });
+
+    it('parses existing query params', () => {
+      delete global.location;
+      global.location = {
+        href: 'http://example.org/',
+        search: '?pasta=true',
+        hash: '',
+      };
+
+      const history = createQueryHistory();
+      expect(history.location.query).toEqual({
+        pasta: 'true',
+      });
     });
 
     describe('updateQuery()', () => {
@@ -99,6 +121,47 @@ describe('createQueryHistory', () => {
     });
 
     describe('push()', () => {
+      it('works when passing a location string', () => {
+        const history = createQueryHistory();
+
+        expect(history.location.pathname).toEqual('/');
+        expect(history.location.query).toEqual({});
+
+        history.push('/soda');
+
+        expect(history.location.pathname).toEqual('/soda');
+      });
+
+      it('works when passing a location object, no queries', () => {
+        const history = createQueryHistory();
+
+        expect(history.location.pathname).toEqual('/');
+        expect(history.location.query).toEqual({});
+
+        history.push({ pathname: '/soda' });
+
+        expect(history.location.pathname).toEqual('/soda');
+      });
+
+      // it.only('also supports passing the search string', () => {
+      //   const history = createQueryHistory();
+
+      //   expect(history.location.pathname).toEqual('/');
+      //   expect(history.location.query).toEqual({});
+
+      //   history.push({
+      //     pathname: '/soda',
+      //     search: '?pasta=true',
+      //   });
+
+      //   console.log('hello', history.location);
+
+      //   expect(history.location.pathname).toEqual('/soda');
+      //   expect(history.location.query).toEqual({
+      //     pasta: 'true',
+      //   });
+      // });
+
       it('updates location and merges query parameters by default', () => {
         const history = createQueryHistory();
 
@@ -150,6 +213,83 @@ describe('createQueryHistory', () => {
         });
 
         history.push({
+          pathname: '/bagel-bites',
+          query: {
+            healthy: false,
+          },
+          mergeQuery: false,
+        });
+
+        expect(history.location.pathname).toEqual('/bagel-bites');
+        expect(history.location.query).toEqual({
+          healthy: 'false',
+        });
+      });
+    });
+
+    describe('replace()', () => {
+      it('works when passing a location string', () => {
+        const history = createQueryHistory();
+
+        expect(history.location.pathname).toEqual('/');
+        expect(history.location.query).toEqual({});
+
+        history.replace('/soda');
+
+        expect(history.location.pathname).toEqual('/soda');
+      });
+
+      it('updates location and merges query parameters by default', () => {
+        const history = createQueryHistory();
+
+        expect(history.location.pathname).toEqual('/');
+        expect(history.location.query).toEqual({});
+
+        history.replace({
+          pathname: '/soda',
+          query: {
+            pasta: 'delicious',
+          },
+        });
+
+        expect(history.location.pathname).toEqual('/soda');
+        expect(history.location.query).toEqual({
+          pasta: 'delicious',
+        });
+
+        history.replace({
+          pathname: '/bagel-bites',
+          query: {
+            healthy: false,
+          },
+        });
+
+        expect(history.location.pathname).toEqual('/bagel-bites');
+        expect(history.location.query).toEqual({
+          pasta: 'delicious',
+          healthy: 'false',
+        });
+      });
+
+      it('can replace query parameters', () => {
+        const history = createQueryHistory();
+
+        expect(history.location.pathname).toEqual('/');
+        expect(history.location.query).toEqual({});
+
+        history.replace({
+          pathname: '/soda',
+          query: {
+            pasta: 'delicious',
+          },
+        });
+
+        expect(history.location.pathname).toEqual('/soda');
+        expect(history.location.query).toEqual({
+          pasta: 'delicious',
+        });
+
+        history.replace({
           pathname: '/bagel-bites',
           query: {
             healthy: false,
