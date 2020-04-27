@@ -3,7 +3,11 @@
 // The API has been modified with a more robust query string API
 
 export default function historyWithQuery(history, stringify, parse) {
-  const addSearch = (location, prevLocation, mergeQuery) => {
+  const updateLocationObjectWithQuery = (
+    location,
+    prevLocation,
+    mergeQuery
+  ) => {
     const isLocationObj = typeof location === 'object';
     const newQuery = isLocationObj ? location.query : {};
 
@@ -35,7 +39,7 @@ export default function historyWithQuery(history, stringify, parse) {
     return newLocation;
   };
 
-  const addQuery = (location) => {
+  const updateHistoryObjectWithQuery = (location) => {
     const { search } = location;
     if (search) {
       location.query = parse(
@@ -55,7 +59,7 @@ export default function historyWithQuery(history, stringify, parse) {
     });
   };
 
-  addQuery(history.location);
+  updateHistoryObjectWithQuery(history.location);
 
   const queryHistory = {
     ...history,
@@ -68,7 +72,11 @@ export default function historyWithQuery(history, stringify, parse) {
             : true;
       }
 
-      const loc = addSearch(location, history.location, mergeQuery);
+      const loc = updateLocationObjectWithQuery(
+        location,
+        history.location,
+        mergeQuery
+      );
       history.push(loc, state);
     },
     replace: (location, state) => {
@@ -80,7 +88,11 @@ export default function historyWithQuery(history, stringify, parse) {
             : true;
       }
 
-      const loc = addSearch(location, history.location, mergeQuery);
+      const loc = updateLocationObjectWithQuery(
+        location,
+        history.location,
+        mergeQuery
+      );
       history.replace(loc, state);
     },
 
@@ -91,13 +103,17 @@ export default function historyWithQuery(history, stringify, parse) {
         pathname: history.location.pathname,
       };
 
-      const loc = addSearch(location, history.location, mergeQuery);
+      const loc = updateLocationObjectWithQuery(
+        location,
+        history.location,
+        mergeQuery
+      );
       history.replace(loc);
     },
   };
 
   history.listen((location) => {
-    addQuery(location);
+    updateHistoryObjectWithQuery(location);
     updateProperties(history, queryHistory);
   });
 
