@@ -1,5 +1,8 @@
 # query-history
 
+[![Travis build status](http://img.shields.io/travis/jamesplease/query-history.svg?style=flat)](https://travis-ci.org/jamesplease/query-history)
+[![npm version](https://img.shields.io/npm/v/query-history.svg)](https://www.npmjs.com/package/query-history)
+
 A [history](https://github.com/ReactTraining/history) with additional APIs to more easily manage query parameters
 using [query-string](https://github.com/sindresorhus/query-string).
 
