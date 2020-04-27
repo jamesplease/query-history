@@ -163,5 +163,71 @@ describe('createQueryHistory', () => {
         });
       });
     });
+
+    describe('replace()', () => {
+      it('updates location and merges query parameters by default', () => {
+        const history = createQueryHistory();
+
+        expect(history.location.pathname).toEqual('/');
+        expect(history.location.query).toEqual({});
+
+        history.replace({
+          pathname: '/soda',
+          query: {
+            pasta: 'delicious',
+          },
+        });
+
+        expect(history.location.pathname).toEqual('/soda');
+        expect(history.location.query).toEqual({
+          pasta: 'delicious',
+        });
+
+        history.replace({
+          pathname: '/bagel-bites',
+          query: {
+            healthy: false,
+          },
+        });
+
+        expect(history.location.pathname).toEqual('/bagel-bites');
+        expect(history.location.query).toEqual({
+          pasta: 'delicious',
+          healthy: 'false',
+        });
+      });
+
+      it('can replace query parameters', () => {
+        const history = createQueryHistory();
+
+        expect(history.location.pathname).toEqual('/');
+        expect(history.location.query).toEqual({});
+
+        history.replace({
+          pathname: '/soda',
+          query: {
+            pasta: 'delicious',
+          },
+        });
+
+        expect(history.location.pathname).toEqual('/soda');
+        expect(history.location.query).toEqual({
+          pasta: 'delicious',
+        });
+
+        history.replace({
+          pathname: '/bagel-bites',
+          query: {
+            healthy: false,
+          },
+          mergeQuery: false,
+        });
+
+        expect(history.location.pathname).toEqual('/bagel-bites');
+        expect(history.location.query).toEqual({
+          healthy: 'false',
+        });
+      });
+    });
   });
 });
