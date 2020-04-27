@@ -1,6 +1,6 @@
 // This code is based on the qhistory library:
 // https://github.com/pshrmn/qhistory
-// The API has been modified with an more robust query string API
+// The API has been modified with a more robust query string API
 
 export default function historyWithQuery(history, stringify, parse) {
   const addSearch = (location, prevLocation, mergeQuery) => {
@@ -35,7 +35,7 @@ export default function historyWithQuery(history, stringify, parse) {
     return newLocation;
   };
 
-  const addQuery = location => {
+  const addQuery = (location) => {
     const { search } = location;
     if (search) {
       location.query = parse(
@@ -48,14 +48,13 @@ export default function historyWithQuery(history, stringify, parse) {
 
   const updateProperties = (history, queryHistory) => {
     const properties = ['location', 'length', 'entries', 'index', 'action'];
-    properties.forEach(prop => {
+    properties.forEach((prop) => {
       if (history.hasOwnProperty(prop)) {
         queryHistory[prop] = history[prop];
       }
     });
   };
 
-  // make sure that the initial location has query support
   addQuery(history.location);
 
   const queryHistory = {
@@ -97,13 +96,7 @@ export default function historyWithQuery(history, stringify, parse) {
     },
   };
 
-  // This relies on being the first listener called by
-  // the actual history instance. If you register a
-  // listener on the history instance before modifying
-  // it with query-history, the location object will not have
-  // the query property set on it when that listener
-  // is called.
-  history.listen(location => {
+  history.listen((location) => {
     addQuery(location);
     updateProperties(history, queryHistory);
   });
