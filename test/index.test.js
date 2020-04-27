@@ -27,6 +27,7 @@ describe('createQueryHistory', () => {
       expect(history).toEqual(
         expect.objectContaining({
           push: expect.any(Function),
+          replace: expect.any(Function),
           listen: expect.any(Function),
           length: expect.any(Number),
           location: expect.any(Object),
