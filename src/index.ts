@@ -19,14 +19,17 @@ export interface QueryObject {
 
 type ReducedHistory = Omit<History, 'push' | 'replace' | 'location'>;
 
-export interface QueryLocationDescriptorObject<HistoryLocationState>
-  extends LocationDescriptorObject<HistoryLocationState> {
+export interface QueryLocationDescriptorObject<
+  HistoryLocationState = LocationState
+> extends LocationDescriptorObject<HistoryLocationState> {
   mergeQuery?: boolean;
   query?: QueryObject;
 }
 
-export interface QueryHistory<Query, HistoryLocationState>
-  extends ReducedHistory {
+export interface QueryHistory<
+  Query = ParsedQuery<string>,
+  HistoryLocationState = LocationState
+> extends ReducedHistory {
   updateQuery: (query: QueryObject, options?: { mergeQuery?: boolean }) => void;
   push(path: Path, state?: HistoryLocationState): void;
   push(location: QueryLocationDescriptorObject<HistoryLocationState>): void;
@@ -35,8 +38,10 @@ export interface QueryHistory<Query, HistoryLocationState>
   location: LocationWithQuery<Query, HistoryLocationState>;
 }
 
-export interface LocationWithQuery<Query, HistoryLocationState>
-  extends Location<HistoryLocationState> {
+export interface LocationWithQuery<
+  Query = ParsedQuery<string>,
+  HistoryLocationState = LocationState
+> extends Location<HistoryLocationState> {
   query: Query;
 }
 
