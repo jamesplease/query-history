@@ -87,9 +87,11 @@ For instance, given the URL `https://app.com/?hello=true&sandwiches=tasty&size=4
 }
 ```
 
-Keep in mind that although this library will parse your query string as an object, the individual query string
-values are always strings. Notice how the `size` parameter is parsed as the string `"40"` in the example above. You
-are responsible for converting the values to their correct type in your application.
+Keep in mind that although this library will parse your query string as an object, by default the individual query string
+values are always strings. Notice how the `size` parameter is parsed as the string `"40"` in the example above.
+
+You are either responsible for converting the values to their correct type in your application, or you can [configure
+`query-string`](https://github.com/jamesplease/query-history#configuring-query-parameter-behavior) to do it for you.
 
 ### Updating query parameters
 
@@ -160,6 +162,19 @@ history.push({
   mergeQuery: false,
 });
 ```
+
+### Removing Query Parameters
+
+You can remove query parameters by passing their value as `undefined`. For example:
+
+```js
+// Removes "sandwiches" from the query parameter list
+history.updateQuery({
+  sandwiches: undefined',
+});
+```
+
+To learn more about how falsey values are parsed, refer to [the `query-string` docs](https://github.com/sindresorhus/query-string#falsy-values).
 
 ### Configuring query parameter behavior
 
