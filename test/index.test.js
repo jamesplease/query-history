@@ -54,6 +54,68 @@ describe('createQueryHistory', () => {
     });
   });
 
+  describe('queryString.parse options', () => {
+    describe('customizing parsing', () => {
+      it('supports parsing booleans', () => {
+        delete global.location;
+        global.location = {
+          href: 'http://example.org/',
+          search: '?pasta=true',
+          hash: '',
+        };
+
+        const history = createQueryHistory({
+          parseOptions: {
+            parseBooleans: true,
+          },
+        });
+
+        expect(history.location.query).toEqual({
+          pasta: true,
+        });
+      });
+
+      it('supports parsing numbers', () => {
+        delete global.location;
+        global.location = {
+          href: 'http://example.org/',
+          search: '?hungerLevel=24',
+          hash: '',
+        };
+
+        const history = createQueryHistory({
+          parseOptions: {
+            parseNumbers: 24,
+          },
+        });
+
+        expect(history.location.query).toEqual({
+          hungerLevel: 24,
+        });
+      });
+
+      it('supports custom array formats', () => {
+        delete global.location;
+        global.location = {
+          href: 'http://example.org/',
+          search: '?hungerLevel=24|31|20',
+          hash: '',
+        };
+
+        const history = createQueryHistory({
+          parseOptions: {
+            arrayFormat: 'separator',
+            arrayFormatSeparator: '|',
+          },
+        });
+
+        expect(history.location.query).toEqual({
+          hungerLevel: ['24', '31', '20'],
+        });
+      });
+    });
+  });
+
   describe('query params', () => {
     it('has an empty object by default when no params exist', () => {
       const history = createQueryHistory();
@@ -64,13 +126,14 @@ describe('createQueryHistory', () => {
       delete global.location;
       global.location = {
         href: 'http://example.org/',
-        search: '?pasta=true',
+        search: '?pasta=true&hungerLevel=24',
         hash: '',
       };
 
       const history = createQueryHistory();
       expect(history.location.query).toEqual({
         pasta: 'true',
+        hungerLevel: '24',
       });
     });
 
