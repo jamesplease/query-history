@@ -200,6 +200,27 @@ describe('createQueryHistory', () => {
           sandwiches: 'also yummy',
         });
       });
+
+      it('can delete query params', () => {
+        const history = createQueryHistory();
+        history.updateQuery({
+          pasta: 'delicious',
+          sandwiches: true,
+        });
+
+        expect(history.location.query).toEqual({
+          pasta: 'delicious',
+          sandwiches: 'true',
+        });
+
+        history.updateQuery({
+          pasta: undefined,
+        });
+
+        expect(history.location.query).toEqual({
+          sandwiches: 'true',
+        });
+      });
     });
 
     describe('push()', () => {
