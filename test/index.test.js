@@ -54,8 +54,27 @@ describe('createQueryHistory', () => {
     });
   });
 
-  describe('queryString.parse options', () => {
-    describe('customizing parsing', () => {
+  describe('queryString options', () => {
+    describe('stringify()', () => {
+      it('supports custom array formats', () => {
+        const history = createQueryHistory({
+          stringifyOptions: {
+            arrayFormat: 'separator',
+            arrayFormatSeparator: '|',
+          },
+        });
+
+        expect(history.location.query).toEqual({});
+
+        history.updateQuery({
+          hungerLevel: [10, 25, 100],
+        });
+
+        expect(history.location.search).toEqual('?hungerLevel=10|25|100');
+      });
+    });
+
+    describe('parse()', () => {
       it('supports parsing booleans', () => {
         delete global.location;
         global.location = {
