@@ -9,7 +9,7 @@ const extensions = ['.js'];
 export default [
   // browser-friendly UMD build
   {
-    input: 'src/index.js',
+    input: 'src/index.ts',
     output: {
       name: 'createQueryHistory',
       file: pkg.browser,
@@ -34,7 +34,7 @@ export default [
 
   // CommonJS (for Node) and ES module (for bundlers) build.
   {
-    input: 'src/index.js',
+    input: 'src/index.ts',
     output: [
       { file: pkg.main, format: 'cjs' },
       { file: pkg.module, format: 'es' },
