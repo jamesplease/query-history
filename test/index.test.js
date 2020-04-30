@@ -309,6 +309,54 @@ describe('createQueryHistory', () => {
           healthy: 'false',
         });
       });
+
+      it('supports passing a query string via search', () => {
+        const history = createQueryHistory();
+
+        expect(history.location.pathname).toEqual('/');
+        expect(history.location.query).toEqual({});
+
+        history.push({
+          pathname: '/soda',
+          search: '?pasta=delicious',
+        });
+
+        expect(history.location.pathname).toEqual('/soda');
+        expect(history.location.query).toEqual({
+          pasta: 'delicious',
+        });
+
+        history.push({
+          pathname: '/bagel-bites',
+          search: '?healthy=false',
+        });
+
+        expect(history.location.pathname).toEqual('/bagel-bites');
+        expect(history.location.query).toEqual({
+          pasta: 'delicious',
+          healthy: 'false',
+        });
+      });
+
+      it('prioritizes object query params over search strings', () => {
+        const history = createQueryHistory();
+
+        expect(history.location.pathname).toEqual('/');
+        expect(history.location.query).toEqual({});
+
+        history.push({
+          pathname: '/soda',
+          search: '?pasta=tastesbad',
+          query: {
+            pasta: 'delicious',
+          },
+        });
+
+        expect(history.location.pathname).toEqual('/soda');
+        expect(history.location.query).toEqual({
+          pasta: 'delicious',
+        });
+      });
     });
 
     describe('replace()', () => {
@@ -378,6 +426,62 @@ describe('createQueryHistory', () => {
           query: {
             healthy: false,
           },
+          mergeQuery: false,
+        });
+
+        expect(history.location.pathname).toEqual('/bagel-bites');
+        expect(history.location.query).toEqual({
+          healthy: 'false',
+        });
+      });
+
+      it('supports passing a query string via search', () => {
+        const history = createQueryHistory();
+
+        expect(history.location.pathname).toEqual('/');
+        expect(history.location.query).toEqual({});
+
+        history.replace({
+          pathname: '/soda',
+          search: '?pasta=delicious',
+        });
+
+        expect(history.location.pathname).toEqual('/soda');
+        expect(history.location.query).toEqual({
+          pasta: 'delicious',
+        });
+
+        history.replace({
+          pathname: '/bagel-bites',
+          search: '?healthy=false',
+        });
+
+        expect(history.location.pathname).toEqual('/bagel-bites');
+        expect(history.location.query).toEqual({
+          pasta: 'delicious',
+          healthy: 'false',
+        });
+      });
+
+      it('supports passing a query string via search with mergeQuery: false', () => {
+        const history = createQueryHistory();
+
+        expect(history.location.pathname).toEqual('/');
+        expect(history.location.query).toEqual({});
+
+        history.replace({
+          pathname: '/soda',
+          search: '?pasta=delicious',
+        });
+
+        expect(history.location.pathname).toEqual('/soda');
+        expect(history.location.query).toEqual({
+          pasta: 'delicious',
+        });
+
+        history.replace({
+          pathname: '/bagel-bites',
+          search: '?healthy=false',
           mergeQuery: false,
         });
 

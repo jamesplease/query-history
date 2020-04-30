@@ -56,6 +56,19 @@ export default function createHistoryWithQuery<
 
   const history = createBrowserHistory<HistoryLocationState>(rest);
 
+  function determineQueryObject(
+    search?: string,
+    queryObject?: QueryObject
+  ): QueryObject | undefined {
+    if (!search && !queryObject) {
+      return;
+    } else if (queryObject) {
+      return queryObject;
+    } else {
+      return queryString.parse(search as string, stringifyOptions);
+    }
+  }
+
   function getUpdatedQueryString(
     prevQueryString: string,
     mergeQuery: boolean,
@@ -114,8 +127,16 @@ export default function createHistoryWithQuery<
             : true;
       }
 
-      const newQueryObject =
+      const searchString =
+        typeof location === 'string' ? undefined : location.search;
+      const possibleQueryObject =
         typeof location === 'string' ? undefined : location.query;
+
+      const newQueryObject = determineQueryObject(
+        searchString,
+        possibleQueryObject
+      );
+
       const newSearchString = getUpdatedQueryString(
         history.location.search,
         mergeQuery,
@@ -146,8 +167,16 @@ export default function createHistoryWithQuery<
             : true;
       }
 
-      const newQueryObject =
+      const searchString =
+        typeof location === 'string' ? undefined : location.search;
+      const possibleQueryObject =
         typeof location === 'string' ? undefined : location.query;
+
+      const newQueryObject = determineQueryObject(
+        searchString,
+        possibleQueryObject
+      );
+
       const newSearchString = getUpdatedQueryString(
         history.location.search,
         mergeQuery,
