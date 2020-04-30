@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "module": "es/index.js",
   "browser": "dist/index.js",
+  "types": "types/index.d.ts",
   "scripts": {
     "clean": "rimraf dist es tmp lib",
     "test": "NODE_ENV=test jest",
@@ -12,8 +13,9 @@
     "prepublishOnly": "npm run build",
     "type-check": "tsc --noEmit",
     "type-check:watch": "npm run type-check -- --watch",
+    "build:types": "tsc --emitDeclarationOnly",
     "build:js": "rollup -c",
-    "build": "npm run clean && npm run build:js"
+    "build": "npm run clean && npm run build:types && npm run build:js"
   },
   "repository": {
     "type": "git",
@@ -36,7 +38,8 @@
   "files": [
     "dist",
     "lib",
-    "es"
+    "es",
+    "types/index.d.ts"
   ],
   "homepage": "https://github.com/jamesplease/query-history#readme",
   "devDependencies": {
