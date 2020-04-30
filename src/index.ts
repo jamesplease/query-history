@@ -28,7 +28,7 @@ export default function createHistoryWithQuery<
   HistoryLocationState = LocationState
 >(
   options: CreateHistoryWithQueryOptions = {}
-): QueryHistory<HistoryLocationState> {
+): QueryHistory<Query, HistoryLocationState> {
   const { stringifyOptions, parseOptions, ...rest } = options;
 
   const history = createBrowserHistory<HistoryLocationState>(rest);
@@ -76,7 +76,7 @@ export default function createHistoryWithQuery<
 
   const queryLocation = convertLocationToQueryLocation(history.location);
 
-  const queryHistory: QueryHistory<HistoryLocationState> = {
+  const queryHistory: QueryHistory<Query, HistoryLocationState> = {
     ...history,
     location: queryLocation,
     push: (
