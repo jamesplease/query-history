@@ -16,21 +16,29 @@ export interface QueryObject {
 type ReducedHistory = Omit<History, 'push' | 'replace' | 'location'>;
 
 export interface QueryLocationDescriptorObject<
+  Query = QueryObject,
   HistoryLocationState = LocationState
 > extends LocationDescriptorObject<HistoryLocationState> {
   mergeQuery?: boolean;
-  query?: QueryObject;
+  query?: Partial<Query>;
 }
 
 export interface QueryHistory<
   Query = QueryObject,
   HistoryLocationState = LocationState
 > extends ReducedHistory {
-  updateQuery: (query: Query, options?: { mergeQuery?: boolean }) => void;
+  updateQuery: (
+    query: Partial<Query>,
+    options?: { mergeQuery?: boolean }
+  ) => void;
   push(path: Path, state?: HistoryLocationState): void;
-  push(location: QueryLocationDescriptorObject<HistoryLocationState>): void;
+  push(
+    location: QueryLocationDescriptorObject<Query, HistoryLocationState>
+  ): void;
   replace(path: Path, state?: HistoryLocationState): void;
-  replace(location: QueryLocationDescriptorObject<HistoryLocationState>): void;
+  replace(
+    location: QueryLocationDescriptorObject<Query, HistoryLocationState>
+  ): void;
   location: LocationWithQuery<Query, HistoryLocationState>;
 }
 
@@ -117,7 +125,9 @@ export default function createHistoryWithQuery<
     ...history,
     location: queryLocation,
     push: (
-      location: Path | QueryLocationDescriptorObject<HistoryLocationState>,
+      location:
+        | Path
+        | QueryLocationDescriptorObject<Query, HistoryLocationState>,
       state?: HistoryLocationState
     ): void => {
       let mergeQuery = true;
@@ -157,7 +167,9 @@ export default function createHistoryWithQuery<
       });
     },
     replace: (
-      location: Path | QueryLocationDescriptorObject<HistoryLocationState>,
+      location:
+        | Path
+        | QueryLocationDescriptorObject<Query, HistoryLocationState>,
       state?: HistoryLocationState
     ): void => {
       let mergeQuery = true;
