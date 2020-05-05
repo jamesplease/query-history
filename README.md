@@ -22,6 +22,16 @@ or [yarn](https://yarnpkg.com/):
 yarn add query-history
 ```
 
+## Table of Contents
+
+- [Guides](#guides)
+  - [Getting Started](#getting-started)
+  - [Reading Query Parameters](#reading-query-parameters)
+  - [Updating Query Parameters](#updating-query-parameters)
+  - [Removing Query Parameters](#removing-query-parameters)
+  - [Configuring the Query Parameter Behavior](#configuring-query-parameter-behavior)
+- [Acknowledgements](#acknowledgements)
+
 ## Guides
 
 The following guides assume that you're using `query-history` with [React Router](https://github.com/ReactTraining/react-router).
