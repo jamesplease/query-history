@@ -7,11 +7,7 @@ import {
   Path,
   LocationDescriptorObject,
 } from 'history';
-import queryString, {
-  ParseOptions,
-  StringifyOptions,
-  ParsedQuery,
-} from 'query-string';
+import queryString, { ParseOptions, StringifyOptions } from 'query-string';
 
 export interface QueryObject {
   [key: string]: any;
@@ -27,10 +23,10 @@ export interface QueryLocationDescriptorObject<
 }
 
 export interface QueryHistory<
-  Query = ParsedQuery<string>,
+  Query = QueryObject,
   HistoryLocationState = LocationState
 > extends ReducedHistory {
-  updateQuery: (query: QueryObject, options?: { mergeQuery?: boolean }) => void;
+  updateQuery: (query: Query, options?: { mergeQuery?: boolean }) => void;
   push(path: Path, state?: HistoryLocationState): void;
   push(location: QueryLocationDescriptorObject<HistoryLocationState>): void;
   replace(path: Path, state?: HistoryLocationState): void;
@@ -39,7 +35,7 @@ export interface QueryHistory<
 }
 
 export interface LocationWithQuery<
-  Query = ParsedQuery<string>,
+  Query = QueryObject,
   HistoryLocationState = LocationState
 > extends Location<HistoryLocationState> {
   query: Query;
@@ -52,7 +48,7 @@ export interface CreateHistoryWithQueryOptions
 }
 
 export default function createHistoryWithQuery<
-  Query = ParsedQuery<string>,
+  Query = QueryObject,
   HistoryLocationState = LocationState
 >(
   options: CreateHistoryWithQueryOptions = {}
