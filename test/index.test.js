@@ -54,6 +54,87 @@ describe('createQueryHistory', () => {
     });
   });
 
+  describe('queryString options', () => {
+    describe('stringify()', () => {
+      it('supports custom array formats', () => {
+        const history = createQueryHistory({
+          stringifyOptions: {
+            arrayFormat: 'separator',
+            arrayFormatSeparator: '|',
+          },
+        });
+
+        expect(history.location.query).toEqual({});
+
+        history.updateQuery({
+          hungerLevel: [10, 25, 100],
+        });
+
+        expect(history.location.search).toEqual('?hungerLevel=10|25|100');
+      });
+    });
+
+    describe('parse()', () => {
+      it('supports parsing booleans', () => {
+        delete global.location;
+        global.location = {
+          href: 'http://example.org/',
+          search: '?pasta=true',
+          hash: '',
+        };
+
+        const history = createQueryHistory({
+          parseOptions: {
+            parseBooleans: true,
+          },
+        });
+
+        expect(history.location.query).toEqual({
+          pasta: true,
+        });
+      });
+
+      it('supports parsing numbers', () => {
+        delete global.location;
+        global.location = {
+          href: 'http://example.org/',
+          search: '?hungerLevel=24',
+          hash: '',
+        };
+
+        const history = createQueryHistory({
+          parseOptions: {
+            parseNumbers: 24,
+          },
+        });
+
+        expect(history.location.query).toEqual({
+          hungerLevel: 24,
+        });
+      });
+
+      it('supports custom array formats', () => {
+        delete global.location;
+        global.location = {
+          href: 'http://example.org/',
+          search: '?hungerLevel=24|31|20',
+          hash: '',
+        };
+
+        const history = createQueryHistory({
+          parseOptions: {
+            arrayFormat: 'separator',
+            arrayFormatSeparator: '|',
+          },
+        });
+
+        expect(history.location.query).toEqual({
+          hungerLevel: ['24', '31', '20'],
+        });
+      });
+    });
+  });
+
   describe('query params', () => {
     it('has an empty object by default when no params exist', () => {
       const history = createQueryHistory();
@@ -64,13 +145,14 @@ describe('createQueryHistory', () => {
       delete global.location;
       global.location = {
         href: 'http://example.org/',
-        search: '?pasta=true',
+        search: '?pasta=true&hungerLevel=24',
         hash: '',
       };
 
       const history = createQueryHistory();
       expect(history.location.query).toEqual({
         pasta: 'true',
+        hungerLevel: '24',
       });
     });
 
@@ -116,6 +198,27 @@ describe('createQueryHistory', () => {
 
         expect(history.location.query).toEqual({
           sandwiches: 'also yummy',
+        });
+      });
+
+      it('can delete query params', () => {
+        const history = createQueryHistory();
+        history.updateQuery({
+          pasta: 'delicious',
+          sandwiches: true,
+        });
+
+        expect(history.location.query).toEqual({
+          pasta: 'delicious',
+          sandwiches: 'true',
+        });
+
+        history.updateQuery({
+          pasta: undefined,
+        });
+
+        expect(history.location.query).toEqual({
+          sandwiches: 'true',
         });
       });
     });
@@ -206,6 +309,54 @@ describe('createQueryHistory', () => {
           healthy: 'false',
         });
       });
+
+      it('supports passing a query string via search', () => {
+        const history = createQueryHistory();
+
+        expect(history.location.pathname).toEqual('/');
+        expect(history.location.query).toEqual({});
+
+        history.push({
+          pathname: '/soda',
+          search: '?pasta=delicious',
+        });
+
+        expect(history.location.pathname).toEqual('/soda');
+        expect(history.location.query).toEqual({
+          pasta: 'delicious',
+        });
+
+        history.push({
+          pathname: '/bagel-bites',
+          search: '?healthy=false',
+        });
+
+        expect(history.location.pathname).toEqual('/bagel-bites');
+        expect(history.location.query).toEqual({
+          pasta: 'delicious',
+          healthy: 'false',
+        });
+      });
+
+      it('prioritizes object query params over search strings', () => {
+        const history = createQueryHistory();
+
+        expect(history.location.pathname).toEqual('/');
+        expect(history.location.query).toEqual({});
+
+        history.push({
+          pathname: '/soda',
+          search: '?pasta=tastesbad',
+          query: {
+            pasta: 'delicious',
+          },
+        });
+
+        expect(history.location.pathname).toEqual('/soda');
+        expect(history.location.query).toEqual({
+          pasta: 'delicious',
+        });
+      });
     });
 
     describe('replace()', () => {
@@ -275,6 +426,62 @@ describe('createQueryHistory', () => {
           query: {
             healthy: false,
           },
+          mergeQuery: false,
+        });
+
+        expect(history.location.pathname).toEqual('/bagel-bites');
+        expect(history.location.query).toEqual({
+          healthy: 'false',
+        });
+      });
+
+      it('supports passing a query string via search', () => {
+        const history = createQueryHistory();
+
+        expect(history.location.pathname).toEqual('/');
+        expect(history.location.query).toEqual({});
+
+        history.replace({
+          pathname: '/soda',
+          search: '?pasta=delicious',
+        });
+
+        expect(history.location.pathname).toEqual('/soda');
+        expect(history.location.query).toEqual({
+          pasta: 'delicious',
+        });
+
+        history.replace({
+          pathname: '/bagel-bites',
+          search: '?healthy=false',
+        });
+
+        expect(history.location.pathname).toEqual('/bagel-bites');
+        expect(history.location.query).toEqual({
+          pasta: 'delicious',
+          healthy: 'false',
+        });
+      });
+
+      it('supports passing a query string via search with mergeQuery: false', () => {
+        const history = createQueryHistory();
+
+        expect(history.location.pathname).toEqual('/');
+        expect(history.location.query).toEqual({});
+
+        history.replace({
+          pathname: '/soda',
+          search: '?pasta=delicious',
+        });
+
+        expect(history.location.pathname).toEqual('/soda');
+        expect(history.location.query).toEqual({
+          pasta: 'delicious',
+        });
+
+        history.replace({
+          pathname: '/bagel-bites',
+          search: '?healthy=false',
           mergeQuery: false,
         });
 

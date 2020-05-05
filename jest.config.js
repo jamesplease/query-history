@@ -1,6 +1,6 @@
 module.exports = {
   collectCoverage: true,
-  collectCoverageFrom: ['src/**/*.js', '!**/node_modules/**'],
+  collectCoverageFrom: ['src/**/*.ts', '!**/node_modules/**'],
   coverageDirectory: 'coverage',
   testURL: 'http://localhost/',
 };

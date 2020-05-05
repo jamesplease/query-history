@@ -22,6 +22,16 @@ or [yarn](https://yarnpkg.com/):
 yarn add query-history
 ```
 
+## Table of Contents
+
+- [Guides](#guides)
+  - [Getting Started](#getting-started)
+  - [Reading Query Parameters](#reading-query-parameters)
+  - [Updating Query Parameters](#updating-query-parameters)
+  - [Removing Query Parameters](#removing-query-parameters)
+  - [Configuring the Query Parameter Behavior](#configuring-query-parameter-behavior)
+- [Acknowledgements](#acknowledgements)
+
 ## Guides
 
 The following guides assume that you're using `query-history` with [React Router](https://github.com/ReactTraining/react-router).
@@ -179,18 +189,45 @@ To learn more about how falsey values are parsed, refer to [the `query-string` d
 ### Configuring query parameter behavior
 
 This library uses the [`query-string`](https://github.com/sindresorhus/query-string) library to parse and serialize query parameters. To configure this
-behavior, pass `queryStringOptions` when calling `createQueryHistory`.
+behavior, the `createQueryHistory` function accepts two options:
 
-For example, if you would like to specify how arrays are serialized and parsed, you can specify the
-[`arrayFormat`](https://github.com/sindresorhus/query-string#arrayformat) option like so:
+- [`parseOptions`](https://github.com/sindresorhus/query-string#parsestring-options): an object of options passed into `queryString.parse()`
+- [`stringifyOptions`](https://github.com/sindresorhus/query-string#stringifyobject-options): an object of options passed into `queryString.stringify()`
+
+Click the options name in the above list to view all of the supported options.
+
+#### Example: automatically parsing numbers and booleans
+
+By default, numbers and booleans in the query parameter are parsed as strings. You can configure this library to parse them
+as their correct types using the following code:
 
 ```js
 import createQueryHistory from 'query-history';
 
 const history = createQueryHistory({
-  queryStringOptions: {
+  parseOptions: {
+    parseNumbers: true,
+    parseBooleans: true,
+  },
+});
+```
+
+#### Example: configuring how arrays are serialized and parsed
+
+Different applications have different requirements when it comes to serializing arrays, and `query-string` supports
+a number of options. In this example, we set the array format to `"comma"`. View all of the options in
+[the `query-string` docs](https://github.com/sindresorhus/query-string#arrayformat).
+
+```js
+import createQueryHistory from 'query-history';
+
+const history = createQueryHistory({
+  stringifyOptions: {
     arrayFormat: 'comma',
   },
+  parseOptions: {
+    arrayFormat: 'comma
+  }
 });
 ```
 
