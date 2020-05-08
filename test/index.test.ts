@@ -9,11 +9,13 @@ import createQueryHistory from '../src';
 // mixed results with that approach. Because this is a relatively small amount of code, I'll
 // stick with this for now, but I'll likely need to revisit it sometimes in the future.
 beforeEach(() => {
+  // @ts-ignore
   delete global.location;
 
   // These are the minimum fields required for React Router's history to parse location properly.
   // see:
   // https://github.com/ReactTraining/history/blob/3f69f9e07b0a739419704cffc3b3563133281548/modules/createBrowserHistory.js#L55-L57
+  // @ts-ignore
   global.location = {
     href: 'http://example.org/',
     pathname: '/',
@@ -76,7 +78,9 @@ describe('createQueryHistory', () => {
 
     describe('parse()', () => {
       it('supports parsing booleans', () => {
+        // @ts-ignore
         delete global.location;
+        // @ts-ignore
         global.location = {
           href: 'http://example.org/',
           search: '?pasta=true',
@@ -95,7 +99,9 @@ describe('createQueryHistory', () => {
       });
 
       it('supports parsing numbers', () => {
+        // @ts-ignore
         delete global.location;
+        // @ts-ignore
         global.location = {
           href: 'http://example.org/',
           search: '?hungerLevel=24',
@@ -104,7 +110,7 @@ describe('createQueryHistory', () => {
 
         const history = createQueryHistory({
           parseOptions: {
-            parseNumbers: 24,
+            parseNumbers: true,
           },
         });
 
@@ -114,7 +120,9 @@ describe('createQueryHistory', () => {
       });
 
       it('supports custom array formats', () => {
+        // @ts-ignore
         delete global.location;
+        // @ts-ignore
         global.location = {
           href: 'http://example.org/',
           search: '?hungerLevel=24|31|20',
@@ -142,7 +150,9 @@ describe('createQueryHistory', () => {
     });
 
     it('parses existing query params', () => {
+      // @ts-ignore
       delete global.location;
+      // @ts-ignore
       global.location = {
         href: 'http://example.org/',
         search: '?pasta=true&hungerLevel=24',
