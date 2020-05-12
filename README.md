@@ -180,7 +180,7 @@ You can remove query parameters by passing their value as `undefined`. For examp
 ```js
 // Removes "sandwiches" from the query parameter list
 history.updateQuery({
-  sandwiches: undefined',
+  sandwiches: undefined,
 });
 ```
 
