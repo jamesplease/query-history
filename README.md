@@ -8,6 +8,8 @@
 A [history](https://github.com/ReactTraining/history) with additional APIs to more easily manage query parameters
 using [query-string](https://github.com/sindresorhus/query-string).
 
+> This library was created for React Router v5. The latest version of React Router, v6, includes more robust query parameter support via [`useSearchParams`](https://reactrouter.com/docs/en/v6/api#usesearchparams). If you are using v6 we encourage you to use `useSearchParams` instead of this library.
+
 ## Installation
 
 Install using [npm](https://www.npmjs.com):
